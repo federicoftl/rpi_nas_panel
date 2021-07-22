@@ -127,6 +127,7 @@ while True:
     # Write two lines of text.
     if btnDOWN.is_pressed:
        if (index!=len(cars)-3 and hindex==len(heights)-1):
+         print("Index " + str(index))
          index += 1
        if hindex != len(heights)-1:
         hindex += 1
