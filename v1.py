@@ -126,7 +126,7 @@ while True:
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
     # Write two lines of text.
     if btnDOWN.is_pressed:
-       if (index!=len(cars)-3 and hindex==len(heights)-1):
+       if (index!=len(cars)-4 and hindex==len(heights)-1):
          print("Index " + str(index))
          index += 1
        if hindex != len(heights)-1:
