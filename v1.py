@@ -141,9 +141,13 @@ while True:
          print("Index " + str(index))
 
     elif btnMID.is_pressed:
-        while btnLEFT.is_pressed:
+        draw.rectangle((0,0,width,height), outline=0, fill=0)
+        while not btnLEFT.is_pressed:
          draw.rectangle((0,0,width,height), outline=0, fill=0)
          draw.text((x+12, top), cars[selectedopt], font=font, fill=255)
+         disp.image(image)
+         disp.display()
+         time.sleep(.1)
 
     elif btnRESET.is_pressed:
         draw.rectangle((0,0,width,height), outline=0, fill=0)
