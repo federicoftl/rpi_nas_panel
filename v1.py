@@ -147,10 +147,15 @@ while True:
          draw.text((x+12, top+12), cars[selectedopt], font=font, fill=255)
          disp.image(image)
          disp.display()
-         time.sleep(.1)
 
     elif btnRESET.is_pressed:
+        draw.text((x+12, top+12), "Shutting down...", font=font, fill=255)
+        disp.image(image)
+        disp.display()
+        time.sleep(3)
         draw.rectangle((0,0,width,height), outline=0, fill=0)
+        disp.image(image)
+        disp.display()
         os.system('sudo shutdown now')
         quit()
 
