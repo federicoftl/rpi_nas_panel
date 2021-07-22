@@ -157,8 +157,8 @@ while True:
         draw.rectangle((0,0,width,height), outline=0, fill=0)
         disp.image(image)
         disp.display()
-        #os.system('sudo shutdown now')
-        #quit()
+        os.system('sudo shutdown now')
+        quit()
 
     # Display image.
     disp.image(image)
