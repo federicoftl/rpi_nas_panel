@@ -103,7 +103,7 @@ bottom = height-padding
 # Move left to right keeping track of the current x position for drawing shapes.
 x = 0
 
-cars = ["Ford", "Volvo", "BMW", "Seat", "Audi", "Mercedes", "Ferrari"]
+cars = ["Ford", "Volvo", "BMW", "Seat", "Audi", "Mercedes", "Ferrari", "Lamborghini", "Opel", "Volkswagen"]
 heights = [0,8,16,25]
 currheight = 0;
 hindex= 0
