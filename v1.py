@@ -151,6 +151,8 @@ while True:
     elif btnRESET.is_pressed:
         draw.rectangle((0,0,width,height), outline=0, fill=0)
         draw.text((x+12, top+12), "Shutting down...", font=font, fill=255)
+        disp.image(image)
+        disp.display()
         time.sleep(3)
         draw.rectangle((0,0,width,height), outline=0, fill=0)
         disp.image(image)
