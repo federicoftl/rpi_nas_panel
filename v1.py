@@ -136,7 +136,7 @@ while True:
     elif btnUP.is_pressed:
         if hindex != 0:
          hindex -= 1
-        if (index!<3 and hindex==0):
+        if (index>3 and hindex==0):
          print("Index " + str(index))
          index -= 1
 
