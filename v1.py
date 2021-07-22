@@ -138,7 +138,7 @@ while True:
         if index ==-1:
             index=len(cars)-1
         if hindex == -1:
-        hindex = len(heights)
+            hindex = len(heights)
 
     elif btnRESET.is_pressed:
         draw.rectangle((0,0,width,height), outline=0, fill=0)
