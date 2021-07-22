@@ -103,7 +103,10 @@ bottom = height-padding
 # Move left to right keeping track of the current x position for drawing shapes.
 x = 0
 
-cars = ["Ford", "Volvo", "BMW"] 
+cars = ["Ford", "Volvo", "BMW", "Seat", "Audi", "Mercedes", "Ferrari"]
+heights = ["0","8","16","25"]
+currheight = 0;
+hindex= 0
 # Load default font.
 font = ImageFont.load_default()
 index = 0
@@ -115,17 +118,28 @@ while True:
 
     # Draw a black filled box to clear the image.
     draw.rectangle((0,0,width,height), outline=0, fill=0)
-    draw.text((x, top),       cars[index], font=font, fill=255)
+    draw.text((x+5, top),       cars[index], font=font, fill=255)
+    draw.text((x+5, top+8),     cars[index+1], font=font, fill=255)
+    draw.text((x+5, top+16),    cars[index+2], font=font, fill=255)
+    draw.text((x+5, top+25),    cars[index+3], font=font, fill=255)
+    draw.text((x, top+heights[hindex]), ">", font=font, fill=255)
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
     # Write two lines of text.
     if btnUP.is_pressed:
        index += 1
+       hindex += 1
        if index == len(cars):
         index = 0
+       if hindex == len(heights):
+        hindex = 0
+
     elif btnDOWN.is_pressed:
         index -= 1
         if index ==-1:
             index=len(cars)-1
+        if hindex == -1:
+        hindex = len(heights)
+
     elif btnRESET.is_pressed:
         draw.rectangle((0,0,width,height), outline=0, fill=0)
         os.system('sudo shutdown now')
