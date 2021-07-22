@@ -110,6 +110,7 @@ hindex= 0
 # Load default font.
 font = ImageFont.load_default()
 index = 0
+selectedopt = 0
 # Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
 # font = ImageFont.truetype('Minecraftia.ttf', 8)
@@ -123,23 +124,26 @@ while True:
     draw.text((x+8, top+16),    cars[index+2], font=font, fill=255)
     draw.text((x+8, top+25),    cars[index+3], font=font, fill=255)
     draw.text((x, top+heights[hindex]), ">", font=font, fill=255)
+    selectedopt = index+hindex
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
     # Write two lines of text.
     if btnDOWN.is_pressed:
        if (index!=len(cars)-4 and hindex==len(heights)-1):
-         print("Index " + str(index))
          index += 1
+         print("Index " + str(index))
        if hindex != len(heights)-1:
         hindex += 1
-
-
     elif btnUP.is_pressed:
         if hindex != 0:
          hindex -= 1
         if (index>0 and hindex==0):
-         print("Index " + str(index))
          index -= 1
+         print("Index " + str(index))
 
+    elif btnMID.is_pressed:
+        while !btnLEFT.is_pressed:
+         draw.rectangle((0,0,width,height), outline=0, fill=0)
+         draw.text((x+12, top), cars[selectedopt], font=font, fill=255)
 
     elif btnRESET.is_pressed:
         draw.rectangle((0,0,width,height), outline=0, fill=0)
