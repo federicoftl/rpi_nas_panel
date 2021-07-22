@@ -104,7 +104,7 @@ bottom = height-padding
 x = 0
 
 cars = ["Ford", "Volvo", "BMW", "Seat", "Audi", "Mercedes", "Ferrari"]
-heights = ["0","8","16","25"]
+heights = [0,8,16,25]
 currheight = 0;
 hindex= 0
 # Load default font.
