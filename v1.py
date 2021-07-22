@@ -124,7 +124,7 @@ while True:
         index = 0
     elif btnDOWN.is_pressed:
         index -= 1
-        if index ==0:
+        if index ==-1:
             index=len(cars)-1
     elif btnRESET.is_pressed:
         draw.rectangle((0,0,width,height), outline=0, fill=0)
