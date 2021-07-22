@@ -118,27 +118,23 @@ while True:
 
     # Draw a black filled box to clear the image.
     draw.rectangle((0,0,width,height), outline=0, fill=0)
-    draw.text((x+5, top),       cars[index], font=font, fill=255)
-    draw.text((x+5, top+8),     cars[index+1], font=font, fill=255)
-    draw.text((x+5, top+16),    cars[index+2], font=font, fill=255)
-    draw.text((x+5, top+25),    cars[index+3], font=font, fill=255)
+    draw.text((x+8, top),       cars[index], font=font, fill=255)
+    draw.text((x+8, top+8),     cars[index+1], font=font, fill=255)
+    draw.text((x+8, top+16),    cars[index+2], font=font, fill=255)
+    draw.text((x+8, top+25),    cars[index+3], font=font, fill=255)
     draw.text((x, top+heights[hindex]), ">", font=font, fill=255)
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
     # Write two lines of text.
-    if btnUP.is_pressed:
-       index += 1
-       hindex += 1
-       if index == len(cars):
-        index = 0
-       if hindex == len(heights):
-        hindex = 0
+    if btnDOWN.is_pressed:
+       if (index!=len(cars)-3 and hindex==len(heights)-1):
+         index += 1
+       if hindex != len(heights)-1:
+        hindex += 1
 
-    elif btnDOWN.is_pressed:
-        index -= 1
-        if index ==-1:
-            index=len(cars)-1
-        if hindex == -1:
-            hindex = len(heights)
+
+    elif btnUP.is_pressed:
+        hindex += 1
+
 
     elif btnRESET.is_pressed:
         draw.rectangle((0,0,width,height), outline=0, fill=0)
