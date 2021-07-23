@@ -110,7 +110,7 @@ hindex= 0
 font = ImageFont.load_default()
 index = 0
 r_index=0
-confirm = false
+confirm = 0
 selectedopt = 0
 # Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
@@ -148,7 +148,7 @@ while True:
                 disp.display()
         if (options[selectedopt]=="Shutdown"):
             r_index=0
-            confirm= false
+            confirm= 0
             while True:
              draw.rectangle((0,0,width,height), outline=0, fill=0)
              draw.text((x+8, top),       "No", font=font, fill=255)
@@ -173,7 +173,7 @@ while True:
                 quit()
         if (options[selectedopt]=="Reboot"):
             r_index=0
-            confirm = false
+            confirm = 0
             while True:
              draw.rectangle((0,0,width,height), outline=0, fill=0)
              draw.text((x+8, top),       "No", font=font, fill=255)
