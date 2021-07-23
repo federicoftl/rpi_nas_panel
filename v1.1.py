@@ -150,7 +150,7 @@ while True:
         if (options[selectedopt]=="Shutdown"):
             r_index=0
             confirm= 0
-            while confirm=0:
+            while confirm == 0:
              draw.rectangle((0,0,width,height), outline=0, fill=0)
              draw.text((x+8, top),       "No", font=font, fill=255)
              draw.text((x+8, top+8),     "Yes", font=font, fill=255)
@@ -175,7 +175,7 @@ while True:
         if (options[selectedopt]=="Reboot"):
             r_index=0
             confirm = 0
-            while confirm = 0:
+            while confirm == 0:
              draw.rectangle((0,0,width,height), outline=0, fill=0)
              draw.text((x+8, top),       "No", font=font, fill=255)
              draw.text((x+8, top+8),     "Yes", font=font, fill=255)
