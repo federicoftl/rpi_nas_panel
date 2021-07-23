@@ -158,9 +158,9 @@ while True:
                 r_index = 1;
              elif btnUP.is_pressed:
                 r_index = 0;
-             elif (btnMID.is_pressed and r_index = 0 ):
+             elif (btnMID.is_pressed and r_index == 0 ):
               break
-             elif (btnMID.is_pressed and r_index = 1 ):
+             elif (btnMID.is_pressed and r_index == 1 ):
                 draw.rectangle((0,0,width,height), outline=0, fill=0)
                 draw.text((x+12, top+12), "Shutting down...", font=font, fill=255)
                 disp.image(image)
@@ -183,9 +183,9 @@ while True:
                 r_index = 1;
              elif btnUP.is_pressed:
                 r_index = 0;
-             elif (btnMID.is_pressed and r_index = 0 ):
+             elif (btnMID.is_pressed and r_index == 0 ):
               break
-             elif (btnMID.is_pressed and r_index = 1 ):
+             elif (btnMID.is_pressed and r_index == 1 ):
                 draw.rectangle((0,0,width,height), outline=0, fill=0)
                 draw.text((x+12, top+12), "Rebooting...", font=font, fill=255)
                 disp.image(image)
