@@ -165,11 +165,12 @@ while True:
              cmd = "vcgencmd measure_temp |cut -f 2 -d '='"
              temp = subprocess.check_output(cmd, shell = True )
              # Pi Stats Display
-             draw.text((x, top+2), "IP: " + str(IP,'utf-8'), font=font, fill=255)
-             draw.text((x, top+18), str(CPU,'utf-8') + "%", font=font, fill=255)
-             draw.text((x+80, top+18), str(temp,'utf-8') , font=font, fill=255)
-             draw.text((x, top+34), str(MemUsage,'utf-8'), font=font, fill=255)
-             draw.text((x, top+50), str(Disk,'utf-8'), font=font, fill=255)
+             draw.rectangle((0,0,width,height), outline=0, fill=0)
+             draw.text((x, top), "IP: " + str(IP,'utf-8'), font=font, fill=255)
+             draw.text((x, top+8), str(CPU,'utf-8') + "%", font=font, fill=255)
+             draw.text((x+80, top+8), str(temp,'utf-8') , font=font, fill=255)
+             draw.text((x, top+16), str(MemUsage,'utf-8'), font=font, fill=255)
+             draw.text((x, top+25), str(Disk,'utf-8'), font=font, fill=255)
              disp.image(image)
              disp.display()
              time.sleep(.25)
@@ -212,13 +213,14 @@ while True:
              battCap = (aReceiveBuf[20] << 8 | aReceiveBuf[19])
 
                      # UPS Stats Display
-             draw.text((x, top+2), "Pi: " + str(piVolts) + "V  " + str(piCurrent) + "mA", font=font, fill=255)
-             draw.text((x, top+18), "Batt: " + str(battVolts) + "V  " + str(battCap) + "%", font=font, fill=255)
+             draw.rectangle((0,0,width,height), outline=0, fill=0)
+             draw.text((x, top), "Pi: " + str(piVolts) + "V  " + str(piCurrent) + "mA", font=font, fill=255)
+             draw.text((x, top+8), "Batt: " + str(battVolts) + "V  " + str(battCap) + "%", font=font, fill=255)
              if (battCur > 0):
-                 draw.text((x, top+34), "Chrg: " + str(battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
+                 draw.text((x, top+16), "Chrg: " + str(battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
              else:
-                 draw.text((x, top+34), "Dchrg: " + str(0-battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
-             draw.text((x+15, top+50), chargeStat, font=font, fill=255)
+                 draw.text((x, top+16), "Dchrg: " + str(0-battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
+             draw.text((x+15, top+25), chargeStat, font=font, fill=255)
              dispC+=1
              disp.image(image)
              disp.display()
