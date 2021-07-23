@@ -1,14 +1,16 @@
-# rpi_nas_panel
- A control panel to use different features of the RasberryPi NAS
+# Raspberry Pi 3B NAS control panel
+ A control panel for the Raspberry 
 
 Menu composition:
--Mount partitions
-	-Submenu with mountable partitions
-  -Confirmation screen
--Connection
-	-TO DO
--NAS info
--Battery info
--Screen off
--Reboot
--Shutdown
+ - Mount partitions 	
+	 - Submenu with mountable partitions  
+		 - Confirmation screen   
+ - Connection
+	 - TO DO
+ - NAS info
+ - Battery info
+ - Screen off
+ - Reboot
+	 - Confirmation screen   
+ - Shutdown
+	 - Confirmation screen   
