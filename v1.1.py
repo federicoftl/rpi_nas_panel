@@ -149,12 +149,14 @@ while True:
                 disp.display()
         if (options[selectedopt]=="Shutdown"):
             r_index=0
-            confirm= 0
+            confirm = 0
             while confirm == 0:
              draw.rectangle((0,0,width,height), outline=0, fill=0)
              draw.text((x+8, top),       "No", font=font, fill=255)
              draw.text((x+8, top+8),     "Yes", font=font, fill=255)
              draw.text((x, top+heights[r_index]), ">", font=font, fill=255)
+             disp.image(image)
+             disp.display()
              if btnDOWN.is_pressed:
                 r_index = 1
              elif btnUP.is_pressed:
@@ -173,13 +175,15 @@ while True:
                 os.system('sudo shutdown now')
                 quit()
         if (options[selectedopt]=="Reboot"):
-            r_index=0
+            r_index = 0
             confirm = 0
             while confirm == 0:
              draw.rectangle((0,0,width,height), outline=0, fill=0)
              draw.text((x+8, top),       "No", font=font, fill=255)
              draw.text((x+8, top+8),     "Yes", font=font, fill=255)
              draw.text((x, top+heights[r_index]), ">", font=font, fill=255)
+             disp.image(image)
+             disp.display()
              if btnDOWN.is_pressed:
                 r_index = 1
              elif btnUP.is_pressed:
