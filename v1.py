@@ -103,9 +103,8 @@ bottom = height-padding
 # Move left to right keeping track of the current x position for drawing shapes.
 x = 0
 
-cars = ["Ford", "Volvo", "BMW", "Seat", "Audi", "Mercedes", "Ferrari", "Lamborghini", "Opel", "Volkswagen"]
+options = ["Mount partitions", "Connectivity", "NAS Info", "Battery Info", "Screen off", "Reboot", "Shutdown"]
 heights = [0,8,16,25]
-currheight = 0;
 hindex= 0
 # Load default font.
 font = ImageFont.load_default()
@@ -119,16 +118,16 @@ while True:
 
     # Draw a black filled box to clear the image.
     draw.rectangle((0,0,width,height), outline=0, fill=0)
-    draw.text((x+8, top),       cars[index], font=font, fill=255)
-    draw.text((x+8, top+8),     cars[index+1], font=font, fill=255)
-    draw.text((x+8, top+16),    cars[index+2], font=font, fill=255)
-    draw.text((x+8, top+25),    cars[index+3], font=font, fill=255)
+    draw.text((x+8, top),       options[index], font=font, fill=255)
+    draw.text((x+8, top+8),     options[index+1], font=font, fill=255)
+    draw.text((x+8, top+16),    options[index+2], font=font, fill=255)
+    draw.text((x+8, top+25),    options[index+3], font=font, fill=255)
     draw.text((x, top+heights[hindex]), ">", font=font, fill=255)
     selectedopt = index+hindex
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
     # Write two lines of text.
     if btnDOWN.is_pressed:
-       if (index!=len(cars)-4 and hindex==len(heights)-1):
+       if (index!=len(options)-4 and hindex==len(heights)-1):
          index += 1
          print("Index " + str(index))
        if hindex != len(heights)-1:
@@ -144,7 +143,7 @@ while True:
         draw.rectangle((0,0,width,height), outline=0, fill=0)
         while not btnLEFT.is_pressed:
          draw.rectangle((0,0,width,height), outline=0, fill=0)
-         draw.text((x+12, top+12), cars[selectedopt], font=font, fill=255)
+         draw.text((x+12, top+12), options[selectedopt], font=font, fill=255)
          disp.image(image)
          disp.display()
 
