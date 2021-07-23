@@ -173,7 +173,7 @@ while True:
              draw.text((x, top+25), str(Disk,'utf-8'), font=font, fill=255)
              disp.image(image)
              disp.display()
-             time.sleep(.25)
+             time.sleep(.1)
 
         if (options[selectedopt]=="Battery Info"):
             while not btnLEFT.is_pressed:
@@ -221,10 +221,9 @@ while True:
              else:
                  draw.text((x, top+16), "Dchrg: " + str(0-battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
              draw.text((x+15, top+25), chargeStat, font=font, fill=255)
-             dispC+=1
              disp.image(image)
              disp.display()
-             time.sleep(.25)
+             time.sleep(.1)
 
 
         
