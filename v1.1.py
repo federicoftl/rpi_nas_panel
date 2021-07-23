@@ -23,12 +23,21 @@ import time
 import os
 import Adafruit_GPIO.SPI as SPI
 import Adafruit_SSD1306
+import smbus2
+import logging
+from ina219 import INA219,DeviceRangeError
+
 
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
 import subprocess
+
+DEVICE_BUS = 1
+DEVICE_ADDR = 0x17
+PROTECT_VOLT = 3700
+SAMPLE_TIME = 2
 
 # Raspberry Pi pin configuration:
 RST = None     # on the PiOLED this pin isnt used
@@ -142,11 +151,87 @@ while True:
          print("Index " + str(index))
 
     elif btnMID.is_pressed:
+
+        if (options[selectedopt]=="NAS Info"):
+            while not btnLEFT.is_pressed:
+             cmd = "hostname -I | cut -d\' \' -f1"
+             IP = subprocess.check_output(cmd, shell = True )
+             cmd = "top -bn1 | grep load | awk '{printf \"CPU: %.2f\", $(NF-2)}'"
+             CPU = subprocess.check_output(cmd, shell = True )
+             cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
+             MemUsage = subprocess.check_output(cmd, shell = True )
+             cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
+             Disk = subprocess.check_output(cmd, shell = True )
+             cmd = "vcgencmd measure_temp |cut -f 2 -d '='"
+             temp = subprocess.check_output(cmd, shell = True )
+             # Pi Stats Display
+             draw.text((x, top+2), "IP: " + str(IP,'utf-8'), font=font, fill=255)
+             draw.text((x, top+18), str(CPU,'utf-8') + "%", font=font, fill=255)
+             draw.text((x+80, top+18), str(temp,'utf-8') , font=font, fill=255)
+             draw.text((x, top+34), str(MemUsage,'utf-8'), font=font, fill=255)
+             draw.text((x, top+50), str(Disk,'utf-8'), font=font, fill=255)
+             disp.image(image)
+             disp.display()
+             time.sleep(.25)
+
+        if (options[selectedopt]=="Battery Info"):
+            while not btnLEFT.is_pressed:
+             ina = INA219(0.00725,address=0x40)
+             ina.configure()
+             piVolts = round(ina.voltage(),2)
+             piCurrent = round (ina.current())
+             
+             ina = INA219(0.005,address=0x45) 
+             ina.configure()
+             battVolts = round(ina.voltage(),2)
+             
+             try:
+                 battCur = round(ina.current())
+                 battPow = round(ina.power()/1000,1)
+             except DeviceRangeError:
+                 battCur = 0
+                 battPow = 0
+             
+             bus = smbus2.SMBus(DEVICE_BUS)
+         
+             aReceiveBuf = []
+             aReceiveBuf.append(0x00)   # Placeholder
+         
+             for i in range(1,255):
+                 aReceiveBuf.append(bus.read_byte_data(DEVICE_ADDR, i))
+             
+             if (aReceiveBuf[8] << 8 | aReceiveBuf[7]) > 4000:
+                 chargeStat = 'Charging USB C'
+             elif (aReceiveBuf[10] << 8 | aReceiveBuf[9]) > 4000:
+                 chargeStat = 'Charging Micro USB.'
+             else:
+                 chargeStat = 'Not Charging'
+             
+             battTemp = (aReceiveBuf[12] << 8 | aReceiveBuf[11])
+             
+             battCap = (aReceiveBuf[20] << 8 | aReceiveBuf[19])
+
+                     # UPS Stats Display
+             draw.text((x, top+2), "Pi: " + str(piVolts) + "V  " + str(piCurrent) + "mA", font=font, fill=255)
+             draw.text((x, top+18), "Batt: " + str(battVolts) + "V  " + str(battCap) + "%", font=font, fill=255)
+             if (battCur > 0):
+                 draw.text((x, top+34), "Chrg: " + str(battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
+             else:
+                 draw.text((x, top+34), "Dchrg: " + str(0-battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
+             draw.text((x+15, top+50), chargeStat, font=font, fill=255)
+             dispC+=1
+             disp.image(image)
+             disp.display()
+             time.sleep(.25)
+
+
+        
         if (options[selectedopt]=="Screen off"):
             while not btnLEFT.is_pressed:
                 draw.rectangle((0,0,width,height), outline=0, fill=0)
                 disp.image(image)
                 disp.display()
+        
         if (options[selectedopt]=="Shutdown"):
             r_index=0
             confirm = 0
@@ -174,6 +259,7 @@ while True:
                 disp.display()
                 os.system('sudo shutdown now')
                 quit()
+        
         if (options[selectedopt]=="Reboot"):
             r_index = 0
             confirm = 0
