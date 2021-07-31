@@ -157,7 +157,7 @@ while True:
             confirm = 0
             while not btnLEFT.is_pressed or confirm ==1 :
               draw.rectangle((0,0,width,height), outline=0, fill=0)
-              draw.text((x+8, top),       "Main (sdb1)", font=font, fill=255)
+              draw.text((x+8, top),       "Main (sda2)", font=font, fill=255)
               draw.text((x+8, top+8),     "Backup (sdb2)", font=font, fill=255)
               draw.text((x, top+heights[r_index]), ">", font=font, fill=255)
               disp.image(image)
@@ -167,7 +167,7 @@ while True:
               elif btnUP.is_pressed:
                  r_index = 0
               elif (btnMID.is_pressed and r_index == 0 ):
-                os.system('sudo mount /dev/sda1')
+                os.system('sudo mount /dev/sda2')
                 draw.rectangle((0,0,width,height), outline=0, fill=0)
                 draw.text((x+12, top+12), "Mounted Main", font=font, fill=255)
                 disp.image(image)
