@@ -167,7 +167,7 @@ while True:
               elif btnUP.is_pressed:
                  r_index = 0
               elif (btnMID.is_pressed and r_index == 0 ):
-                os.system('sudo mount /dev/sdb1')
+                os.system('sudo mount /dev/sda1')
                 draw.rectangle((0,0,width,height), outline=0, fill=0)
                 draw.text((x+12, top+12), "Mounted Main", font=font, fill=255)
                 disp.image(image)
@@ -176,7 +176,7 @@ while True:
                 confirm = 1
 
               elif (btnMID.is_pressed and r_index == 1 ):
-               os.system('sudo mount /dev/sdb2')
+               os.system('sudo mount /dev/sdb1')
                draw.rectangle((0,0,width,height), outline=0, fill=0)
                draw.text((x+12, top+12), "Mounted Backup", font=font, fill=255)
                disp.image(image)
