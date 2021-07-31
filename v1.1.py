@@ -155,7 +155,7 @@ while True:
         if (options[selectedopt]=="Mount partitions"):
             r_index = 0
             confirm = 0
-            while not btnLEFT.is_pressed or confirm ==1 :
+            while not btnLEFT.is_pressed or not confirm ==1 :
               draw.rectangle((0,0,width,height), outline=0, fill=0)
               draw.text((x+8, top),       "Main (sda2)", font=font, fill=255)
               draw.text((x+8, top+8),     "Backup (sdb2)", font=font, fill=255)
