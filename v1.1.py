@@ -34,6 +34,9 @@ from PIL import ImageFont
 
 import subprocess
 
+MAINDRIVE= 'sda2'
+BACKUPDRIVE= 'sdb1'
+
 DEVICE_BUS = 1
 DEVICE_ADDR = 0x17
 PROTECT_VOLT = 3700
@@ -112,7 +115,7 @@ bottom = height-padding
 # Move left to right keeping track of the current x position for drawing shapes.
 x = 0
 
-options = ["Mount partitions", "Connectivity", "NAS Info", "Battery Info", "Screen off", "Reboot", "Shutdown"]
+options = ["Mount partitions", "Backup now", "Connectivity", "NAS Info", "Battery Info", "Screen off", "Reboot", "Shutdown"]
 heights = [0,8,16,25]
 hindex= 0
 # Load default font.
@@ -167,7 +170,7 @@ while True:
               elif btnUP.is_pressed:
                  r_index = 0
               elif (btnMID.is_pressed and r_index == 0 ):
-                os.system('sudo mount /dev/sda2')
+                os.system('sudo mount /dev/'+MAINDRIVE)
                 draw.rectangle((0,0,width,height), outline=0, fill=0)
                 draw.text((x+12, top+12), "Mounted Main", font=font, fill=255)
                 disp.image(image)
@@ -176,7 +179,7 @@ while True:
                 confirm = 1
 
               elif (btnMID.is_pressed and r_index == 1 ):
-               os.system('sudo mount /dev/sdb1')
+               os.system('sudo mount /dev/'+BACKUPDRIVE)
                draw.rectangle((0,0,width,height), outline=0, fill=0)
                draw.text((x+12, top+12), "Mounted Backup", font=font, fill=255)
                disp.image(image)
