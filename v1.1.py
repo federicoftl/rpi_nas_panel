@@ -158,7 +158,7 @@ while True:
         if (options[selectedopt]=="NAS Info"):
             rpi_info()
         if (options[selectedopt]=="Battery Info"):
-            bat_info()
+            #bat_info()
         if (options[selectedopt]=="Screen off"):
             scr_off()
         if (options[selectedopt]=="Shutdown"):
@@ -295,51 +295,51 @@ def mount_part():
        confirm = 1
 
 #--------------------------------BATTERY INFO
-def bat_info():
-    while not btnLEFT.is_pressed:
-     ina = INA219(0.00725,address=0x40)
-     ina.configure()
-     piVolts = round(ina.voltage(),2)
-     piCurrent = round (ina.current())
-     
-     ina = INA219(0.005,address=0x45) 
-     ina.configure()
-     battVolts = round(ina.voltage(),2)
-     
-     try:
-         battCur = round(ina.current())
-         battPow = round(ina.power()/1000,1)
-     except DeviceRangeError:
-         battCur = 0
-         battPow = 0
-     
-     bus = smbus2.SMBus(DEVICE_BUS)
-    
-     aReceiveBuf = []
-     aReceiveBuf.append(0x00)   # Placeholder
-    
-     for i in range(1,255):
-         aReceiveBuf.append(bus.read_byte_data(DEVICE_ADDR, i))
-     
-     if (aReceiveBuf[8] << 8 | aReceiveBuf[7]) > 4000:
-         chargeStat = 'Charging USB C'
-     elif (aReceiveBuf[10] << 8 | aReceiveBuf[9]) > 4000:
-         chargeStat = 'Charging Micro USB.'
-     else:
-         chargeStat = 'Not Charging'
-     
-     battTemp = (aReceiveBuf[12] << 8 | aReceiveBuf[11])
-     
-     battCap = (aReceiveBuf[20] << 8 | aReceive 
-             # UPS Stats Display
-     draw.rectangle((0,0,width,height), outline=0, fill=0)
-     draw.text((x, top), "Pi: " + str(piVolts) + "V  " + str(piCurrent) + "mA", font=font, fill=255)
-     draw.text((x, top+8), "Batt: " + str(battVolts) + "V  " + str(battCap) + "%", font=font, fill=255)
-     if (battCur > 0):
-         draw.text((x, top+16), "Chrg: " + str(battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
-     else:
-         draw.text((x, top+16), "Dchrg: " + str(0-battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
-     draw.text((x+15, top+25), chargeStat, font=font, fill=255)
-     disp.image(image)
-     disp.display()
-     time.sleep(.1)
+#def bat_info():
+#    while not btnLEFT.is_pressed:
+#     ina = INA219(0.00725,address=0x40)
+#     ina.configure()
+#     piVolts = round(ina.voltage(),2)
+#     piCurrent = round (ina.current())
+#     
+#     ina = INA219(0.005,address=0x45) 
+#     ina.configure()
+#     battVolts = round(ina.voltage(),2)
+#     
+#     try:
+#         battCur = round(ina.current())
+#         battPow = round(ina.power()/1000,1)
+#     except DeviceRangeError:
+#         battCur = 0
+#         battPow = 0
+#     
+#     bus = smbus2.SMBus(DEVICE_BUS)
+#    
+#     aReceiveBuf = []
+#     aReceiveBuf.append(0x00)   # Placeholder
+#    
+#     for i in range(1,255):
+#         aReceiveBuf.append(bus.read_byte_data(DEVICE_ADDR, i))
+#     
+#     if (aReceiveBuf[8] << 8 | aReceiveBuf[7]) > 4000:
+#         chargeStat = 'Charging USB C'
+#     elif (aReceiveBuf[10] << 8 | aReceiveBuf[9]) > 4000:
+#         chargeStat = 'Charging Micro USB.'
+#     else:
+#         chargeStat = 'Not Charging'
+#     
+#     battTemp = (aReceiveBuf[12] << 8 | aReceiveBuf[11])
+#     
+#     battCap = (aReceiveBuf[20] << 8 | aReceive 
+#             # UPS Stats Display
+#     draw.rectangle((0,0,width,height), outline=0, fill=0)
+#     draw.text((x, top), "Pi: " + str(piVolts) + "V  " + str(piCurrent) + "mA", font=font, fill=255)
+#     draw.text((x, top+8), "Batt: " + str(battVolts) + "V  " + str(battCap) + "%", font=font, fill=255)
+#     if (battCur > 0):
+#         draw.text((x, top+16), "Chrg: " + str(battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
+#     else:
+#         draw.text((x, top+16), "Dchrg: " + str(0-battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
+#     draw.text((x+15, top+25), chargeStat, font=font, fill=255)
+#     disp.image(image)
+#     disp.display()
+#     time.sleep(.1)
