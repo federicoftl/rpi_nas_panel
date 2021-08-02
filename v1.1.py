@@ -129,6 +129,7 @@ selectedopt = 0
 # font = ImageFont.truetype('Minecraftia.ttf', 8)
 
 while True:
+
     # Draw a black filled box to clear the image.
     draw.rectangle((0,0,width,height), outline=0, fill=0)
     draw.text((x+8, top),       options[index], font=font, fill=255)
@@ -153,193 +154,177 @@ while True:
          print("Index " + str(index))
 
     elif btnMID.is_pressed:
+
         if (options[selectedopt]=="Mount partitions"):
-            mount_part()                 
+            r_index = 0
+            confirm = 0
+            while not btnLEFT.is_pressed or not confirm ==1 :
+              draw.rectangle((0,0,width,height), outline=0, fill=0)
+              draw.text((x+8, top),       "Main (sda2)", font=font, fill=255)
+              draw.text((x+8, top+8),     "Backup (sdb2)", font=font, fill=255)
+              draw.text((x, top+heights[r_index]), ">", font=font, fill=255)
+              disp.image(image)
+              disp.display()
+              if btnDOWN.is_pressed:
+                 r_index = 1
+              elif btnUP.is_pressed:
+                 r_index = 0
+              elif (btnMID.is_pressed and r_index == 0 ):
+                os.system('sudo mount /dev/'+MAINDRIVE)
+                draw.rectangle((0,0,width,height), outline=0, fill=0)
+                draw.text((x+12, top+12), "Mounted Main", font=font, fill=255)
+                disp.image(image)
+                disp.display()
+                time.sleep(2)
+                confirm = 1
+
+              elif (btnMID.is_pressed and r_index == 1 ):
+               os.system('sudo mount /dev/'+BACKUPDRIVE)
+               draw.rectangle((0,0,width,height), outline=0, fill=0)
+               draw.text((x+12, top+12), "Mounted Backup", font=font, fill=255)
+               disp.image(image)
+               disp.display()
+               time.sleep(2)
+               confirm = 1
+                 
         if (options[selectedopt]=="NAS Info"):
-            rpi_info()
-        #if (options[selectedopt]=="Battery Info"):
-            #bat_info()
+            while not btnLEFT.is_pressed:
+             cmd = "hostname -I | cut -d\' \' -f1"
+             IP = subprocess.check_output(cmd, shell = True )
+             cmd = "top -bn1 | grep load | awk '{printf \"CPU: %.2f\", $(NF-2)}'"
+             CPU = subprocess.check_output(cmd, shell = True )
+             cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
+             MemUsage = subprocess.check_output(cmd, shell = True )
+             cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
+             Disk = subprocess.check_output(cmd, shell = True )
+             cmd = "vcgencmd measure_temp |cut -f 2 -d '='"
+             temp = subprocess.check_output(cmd, shell = True )
+             # Pi Stats Display
+             draw.rectangle((0,0,width,height), outline=0, fill=0)
+             draw.text((x, top), "IP: " + str(IP,'utf-8'), font=font, fill=255)
+             draw.text((x, top+8), str(CPU,'utf-8') + "%", font=font, fill=255)
+             draw.text((x+80, top+8), str(temp,'utf-8') , font=font, fill=255)
+             draw.text((x, top+16), str(MemUsage,'utf-8'), font=font, fill=255)
+             draw.text((x, top+25), str(Disk,'utf-8'), font=font, fill=255)
+             disp.image(image)
+             disp.display()
+             time.sleep(.1)
+
+        if (options[selectedopt]=="Battery Info"):
+            while not btnLEFT.is_pressed:
+             ina = INA219(0.00725,address=0x40)
+             ina.configure()
+             piVolts = round(ina.voltage(),2)
+             piCurrent = round (ina.current())
+             
+             ina = INA219(0.005,address=0x45) 
+             ina.configure()
+             battVolts = round(ina.voltage(),2)
+             
+             try:
+                 battCur = round(ina.current())
+                 battPow = round(ina.power()/1000,1)
+             except DeviceRangeError:
+                 battCur = 0
+                 battPow = 0
+             
+             bus = smbus2.SMBus(DEVICE_BUS)
+         
+             aReceiveBuf = []
+             aReceiveBuf.append(0x00)   # Placeholder
+         
+             for i in range(1,255):
+                 aReceiveBuf.append(bus.read_byte_data(DEVICE_ADDR, i))
+             
+             if (aReceiveBuf[8] << 8 | aReceiveBuf[7]) > 4000:
+                 chargeStat = 'Charging USB C'
+             elif (aReceiveBuf[10] << 8 | aReceiveBuf[9]) > 4000:
+                 chargeStat = 'Charging Micro USB.'
+             else:
+                 chargeStat = 'Not Charging'
+             
+             battTemp = (aReceiveBuf[12] << 8 | aReceiveBuf[11])
+             
+             battCap = (aReceiveBuf[20] << 8 | aReceiveBuf[19])
+
+                     # UPS Stats Display
+             draw.rectangle((0,0,width,height), outline=0, fill=0)
+             draw.text((x, top), "Pi: " + str(piVolts) + "V  " + str(piCurrent) + "mA", font=font, fill=255)
+             draw.text((x, top+8), "Batt: " + str(battVolts) + "V  " + str(battCap) + "%", font=font, fill=255)
+             if (battCur > 0):
+                 draw.text((x, top+16), "Chrg: " + str(battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
+             else:
+                 draw.text((x, top+16), "Dchrg: " + str(0-battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
+             draw.text((x+15, top+25), chargeStat, font=font, fill=255)
+             disp.image(image)
+             disp.display()
+             time.sleep(.1)
+
+
+        
         if (options[selectedopt]=="Screen off"):
-            scr_off()
+            while not btnLEFT.is_pressed:
+                draw.rectangle((0,0,width,height), outline=0, fill=0)
+                disp.image(image)
+                disp.display()
+        
         if (options[selectedopt]=="Shutdown"):
-            shutdown()
+            r_index=0
+            confirm = 0
+            while confirm == 0:
+             draw.rectangle((0,0,width,height), outline=0, fill=0)
+             draw.text((x+8, top),       "No", font=font, fill=255)
+             draw.text((x+8, top+8),     "Yes", font=font, fill=255)
+             draw.text((x, top+heights[r_index]), ">", font=font, fill=255)
+             disp.image(image)
+             disp.display()
+             if btnDOWN.is_pressed:
+                r_index = 1
+             elif btnUP.is_pressed:
+                r_index = 0
+             elif (btnMID.is_pressed and r_index == 0 ):
+              confirm = 1
+             elif (btnMID.is_pressed and r_index == 1 ):
+                draw.rectangle((0,0,width,height), outline=0, fill=0)
+                draw.text((x+12, top+12), "Shutting down...", font=font, fill=255)
+                disp.image(image)
+                disp.display()
+                time.sleep(3)
+                draw.rectangle((0,0,width,height), outline=0, fill=0)
+                disp.image(image)
+                disp.display()
+                os.system('sudo shutdown now')
+                quit()
+        
         if (options[selectedopt]=="Reboot"):
-            reboot()
+            r_index = 0
+            confirm = 0
+            while confirm == 0:
+             draw.rectangle((0,0,width,height), outline=0, fill=0)
+             draw.text((x+8, top),       "No", font=font, fill=255)
+             draw.text((x+8, top+8),     "Yes", font=font, fill=255)
+             draw.text((x, top+heights[r_index]), ">", font=font, fill=255)
+             disp.image(image)
+             disp.display()
+             if btnDOWN.is_pressed:
+                r_index = 1
+             elif btnUP.is_pressed:
+                r_index = 0
+             elif (btnMID.is_pressed and r_index == 0 ):
+              confirm  = 1
+             elif (btnMID.is_pressed and r_index == 1 ):
+                draw.rectangle((0,0,width,height), outline=0, fill=0)
+                draw.text((x+12, top+12), "Rebooting...", font=font, fill=255)
+                disp.image(image)
+                disp.display()
+                time.sleep(3)
+                draw.rectangle((0,0,width,height), outline=0, fill=0)
+                disp.image(image)
+                disp.display()
+                os.system('sudo reboot now')
+                quit()
 
     # Display image.
-disp.image(image)
-disp.display()
-time.sleep(.1)
-
-#--------------------------------FUNCTIONS
-
-#--------------------------------REBOOT PI
-def reboot():
-    r_index = 0
-    confirm = 0
-    while confirm == 0:
-     draw.rectangle((0,0,width,height), outline=0, fill=0)
-     draw.text((x+8, top),       "No", font=font, fill=255)
-     draw.text((x+8, top+8),     "Yes", font=font, fill=255)
-     draw.text((x, top+heights[r_index]), ">", font=font, fill=255)
-     disp.image(image)
-     disp.display()
-     if btnDOWN.is_pressed:
-        r_index = 1
-     elif btnUP.is_pressed:
-        r_index = 0
-     elif (btnMID.is_pressed and r_index == 0 ):
-      confirm  = 1
-     elif (btnMID.is_pressed and r_index == 1 ):
-        draw.rectangle((0,0,width,height), outline=0, fill=0)
-        draw.text((x+12, top+12), "Rebooting...", font=font, fill=255)
-        disp.image(image)
-        disp.display()
-        time.sleep(3)
-        draw.rectangle((0,0,width,height), outline=0, fill=0)
-        disp.image(image)
-        disp.display()
-        os.system('sudo reboot now')
-        quit()
-
-#--------------------------------SHUTDOWN PI
-def shutdown():
-    r_index=0
-    confirm = 0
-    while confirm == 0:
-     draw.rectangle((0,0,width,height), outline=0, fill=0)
-     draw.text((x+8, top),       "No", font=font, fill=255)
-     draw.text((x+8, top+8),     "Yes", font=font, fill=255)
-     draw.text((x, top+heights[r_index]), ">", font=font, fill=255)
-     disp.image(image)
-     disp.display()
-     if btnDOWN.is_pressed:
-        r_index = 1
-     elif btnUP.is_pressed:
-        r_index = 0
-     elif (btnMID.is_pressed and r_index == 0 ):
-      confirm = 1
-     elif (btnMID.is_pressed and r_index == 1 ):
-        draw.rectangle((0,0,width,height), outline=0, fill=0)
-        draw.text((x+12, top+12), "Shutting down...", font=font, fill=255)
-        disp.image(image)
-        disp.display()
-        time.sleep(3)
-        draw.rectangle((0,0,width,height), outline=0, fill=0)
-        disp.image(image)
-        disp.display()
-        os.system('sudo shutdown now')
-        quit()
-
-#--------------------------------SCREEN OFF
-def scr_off():
-    while not btnLEFT.is_pressed:
-     draw.rectangle((0,0,width,height), outline=0, fill=0)
-     disp.image(image)
-     disp.display()
-
-#--------------------------------RPI INFO
-def rpi_info():
-    while not btnLEFT.is_pressed:
-     cmd = "hostname -I | cut -d\' \' -f1"
-     IP = subprocess.check_output(cmd, shell = True )
-     cmd = "top -bn1 | grep load | awk '{printf \"CPU: %.2f\", $(NF-2)}'"
-     CPU = subprocess.check_output(cmd, shell = True )
-     cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
-     MemUsage = subprocess.check_output(cmd, shell = True )
-     cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
-     Disk = subprocess.check_output(cmd, shell = True )
-     cmd = "vcgencmd measure_temp |cut -f 2 -d '='"
-     temp = subprocess.check_output(cmd, shell = True )
-     # Pi Stats Display
-     draw.rectangle((0,0,width,height), outline=0, fill=0)
-     draw.text((x, top), "IP: " + str(IP,'utf-8'), font=font, fill=255)
-     draw.text((x, top+8), str(CPU,'utf-8') + "%", font=font, fill=255)
-     draw.text((x+80, top+8), str(temp,'utf-8') , font=font, fill=255)
-     draw.text((x, top+16), str(MemUsage,'utf-8'), font=font, fill=255)
-     draw.text((x, top+25), str(Disk,'utf-8'), font=font, fill=255)
-     disp.image(image)
-     disp.display()
-     time.sleep(.1)
-
-#--------------------------------MOUNT PARTITIONS
-def mount_part():
-    r_index = 0
-    confirm = 0
-    while not btnLEFT.is_pressed or not confirm ==1 :
-      draw.rectangle((0,0,width,height), outline=0, fill=0)
-      draw.text((x+8, top),       "Main (sda2)", font=font, fill=255)
-      draw.text((x+8, top+8),     "Backup (sdb2)", font=font, fill=255)
-      draw.text((x, top+heights[r_index]), ">", font=font, fill=255)
-      disp.image(image)
-      disp.display()
-      if btnDOWN.is_pressed:
-         r_index = 1
-      elif btnUP.is_pressed:
-         r_index = 0
-      elif (btnMID.is_pressed and r_index == 0 ):
-        os.system('sudo mount /dev/'+MAINDRIVE)
-        draw.rectangle((0,0,width,height), outline=0, fill=0)
-        draw.text((x+12, top+12), "Mounted Main", font=font, fill=255)
-        disp.image(image)
-        disp.display()
-        time.sleep(2)
-        confirm
-      elif (btnMID.is_pressed and r_index == 1 ):
-       os.system('sudo mount /dev/'+BACKUPDRIVE)
-       draw.rectangle((0,0,width,height), outline=0, fill=0)
-       draw.text((x+12, top+12), "Mounted Backup", font=font, fill=255)
-       disp.image(image)
-       disp.display()
-       time.sleep(2)
-       confirm = 1
-
-#--------------------------------BATTERY INFO
-#def bat_info():
-#    while not btnLEFT.is_pressed:
-#     ina = INA219(0.00725,address=0x40)
-#     ina.configure()
-#     piVolts = round(ina.voltage(),2)
-#     piCurrent = round (ina.current())
-#     
-#     ina = INA219(0.005,address=0x45) 
-#     ina.configure()
-#     battVolts = round(ina.voltage(),2)
-#     
-#     try:
-#         battCur = round(ina.current())
-#         battPow = round(ina.power()/1000,1)
-#     except DeviceRangeError:
-#         battCur = 0
-#         battPow = 0
-#     
-#     bus = smbus2.SMBus(DEVICE_BUS)
-#    
-#     aReceiveBuf = []
-#     aReceiveBuf.append(0x00)   # Placeholder
-#    
-#     for i in range(1,255):
-#         aReceiveBuf.append(bus.read_byte_data(DEVICE_ADDR, i))
-#     
-#     if (aReceiveBuf[8] << 8 | aReceiveBuf[7]) > 4000:
-#         chargeStat = 'Charging USB C'
-#     elif (aReceiveBuf[10] << 8 | aReceiveBuf[9]) > 4000:
-#         chargeStat = 'Charging Micro USB.'
-#     else:
-#         chargeStat = 'Not Charging'
-#     
-#     battTemp = (aReceiveBuf[12] << 8 | aReceiveBuf[11])
-#     
-#     battCap = (aReceiveBuf[20] << 8 | aReceive 
-#             # UPS Stats Display
-#     draw.rectangle((0,0,width,height), outline=0, fill=0)
-#     draw.text((x, top), "Pi: " + str(piVolts) + "V  " + str(piCurrent) + "mA", font=font, fill=255)
-#     draw.text((x, top+8), "Batt: " + str(battVolts) + "V  " + str(battCap) + "%", font=font, fill=255)
-#     if (battCur > 0):
-#         draw.text((x, top+16), "Chrg: " + str(battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
-#     else:
-#         draw.text((x, top+16), "Dchrg: " + str(0-battCur) + "mA " + str(battPow) + "W", font=font, fill=255)
-#     draw.text((x+15, top+25), chargeStat, font=font, fill=255)
-#     disp.image(image)
-#     disp.display()
-#     time.sleep(.1)
+    disp.image(image)
+    disp.display()
+    time.sleep(.1)
