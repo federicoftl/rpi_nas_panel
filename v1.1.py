@@ -157,7 +157,7 @@ while True:
             mount_part()                 
         if (options[selectedopt]=="NAS Info"):
             rpi_info()
-        if (options[selectedopt]=="Battery Info"):
+        #if (options[selectedopt]=="Battery Info"):
             #bat_info()
         if (options[selectedopt]=="Screen off"):
             scr_off()
