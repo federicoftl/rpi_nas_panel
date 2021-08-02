@@ -119,14 +119,14 @@ options = ["Mount partitions", "Backup now", "Connectivity", "NAS Info", "Batter
 heights = [0,8,16,25]
 hindex= 0
 # Load default font.
-font = ImageFont.load_default()
+#font = ImageFont.load_default()
 index = 0
 r_index=0
 confirm = 0
 selectedopt = 0
 # Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
-# font = ImageFont.truetype('Minecraftia.ttf', 8)
+font = ImageFont.truetype('Minecraftia.ttf', 8)
 
 while True:
 
