@@ -234,9 +234,9 @@ def shutdown():
 #--------------------------------SCREEN OFF
 def scr_off():
     while not btnLEFT.is_pressed:
-    draw.rectangle((0,0,width,height), outline=0, fill=0)
-    disp.image(image)
-    disp.display()
+     draw.rectangle((0,0,width,height), outline=0, fill=0)
+     disp.image(image)
+     disp.display()
 
 #--------------------------------RPI INFO
 def rpi_info():
