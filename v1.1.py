@@ -184,7 +184,7 @@ while True:
              CPU = subprocess.check_output(cmd, shell = True )
              cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
              MemUsage = subprocess.check_output(cmd, shell = True )
-             cmd = "df -h | awk '$NF==\"/srv/dev-disk-by-uuid-D81A0EB11A0E8CA6\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
+             cmd = "df -h | awk '$1==\"/dev/"+MAINDRIVE+"\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
              Disk = subprocess.check_output(cmd, shell = True )
              cmd = "vcgencmd measure_temp |cut -f 2 -d '='"
              temp = subprocess.check_output(cmd, shell = True )
