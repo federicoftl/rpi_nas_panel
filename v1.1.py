@@ -1,23 +1,4 @@
-# Copyright (c) 2017 Adafruit Industries
-# Author: Tony DiCola & James DeVito
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+# Adafruit_SSD1306 edited by Federico P.
 from gpiozero import Button
 import time
 import os
@@ -27,12 +8,13 @@ import smbus2
 import logging
 from ina219 import INA219,DeviceRangeError
 
-
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
 import subprocess
+
+# Set disk drives locations
 
 MAINDRIVE= 'sda2'
 BACKUPDRIVE= 'sdb1'
@@ -49,6 +31,7 @@ DC = 23
 SPI_PORT = 0
 SPI_DEVICE = 0
 
+# Initialize buttons and their connected pin on the GPIO
 btnUP = Button(26)
 btnDOWN = Button(19)
 btnLEFT = Button(13)
@@ -115,18 +98,23 @@ bottom = height-padding
 # Move left to right keeping track of the current x position for drawing shapes.
 x = 0
 
-options = ["Mount partitions", "Backup now", "Connectivity", "NAS Info", "Battery Info", "Screen off", "Reboot", "Shutdown"]
+
+# Menu settings
+options = ["Restart DLNA", "Mount partitions", "Backup now", "Connectivity", "NAS Info", "Battery Info", "Screen off", "Reboot", "Shutdown"]
 heights = [0,8,16,25]
+
+# Indexes and options
 hindex= 0
-# Load default font.
-font = ImageFont.load_default()
 index = 0
 r_index=0
 confirm = 0
 selectedopt = 0
+
+# Load default font.
+font = ImageFont.load_default()
+
 # Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
-#font = ImageFont.truetype('Minecraftia.ttf', 10)
 
 while True:
 
@@ -136,6 +124,7 @@ while True:
     draw.text((x+8, top+8),     options[index+1], font=font, fill=255)
     draw.text((x+8, top+16),    options[index+2], font=font, fill=255)
     draw.text((x+8, top+25),    options[index+3], font=font, fill=255)
+    # Draw the focused menu option indicator 
     draw.text((x, top+heights[hindex]), ">", font=font, fill=255)
     selectedopt = index+hindex
     # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
@@ -195,7 +184,7 @@ while True:
              CPU = subprocess.check_output(cmd, shell = True )
              cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
              MemUsage = subprocess.check_output(cmd, shell = True )
-             cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
+             cmd = "df -h | awk '$NF==\"/srv/dev-disk-by-uuid-D81A0EB11A0E8CA6\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
              Disk = subprocess.check_output(cmd, shell = True )
              cmd = "vcgencmd measure_temp |cut -f 2 -d '='"
              temp = subprocess.check_output(cmd, shell = True )
@@ -327,4 +316,4 @@ while True:
     # Display image.
     disp.image(image)
     disp.display()
-    time.sleep(.1)
+    # time.sleep(.1)
