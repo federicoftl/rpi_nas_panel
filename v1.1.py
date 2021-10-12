@@ -249,7 +249,18 @@ while True:
              disp.display()
              time.sleep(.1)
 
-
+        if (options[selectedopt]=="Restart DLNA"):
+            os.system('sudo systemctl restart minidlna')
+            draw.rectangle((0,0,width,height), outline=0, fill=0)  
+            draw.text((x+12, top+12), "Restarting DLNA", font=font, fill=255)
+            disp.image(image)
+            disp.display()
+            time.sleep(3)
+            draw.rectangle((0,0,width,height), outline=0, fill=0)  
+            draw.text((x+12, top+12), "Restart complete", font=font, fill=255)
+            disp.image(image)
+            disp.display()
+            time.sleep(3)
         
         if (options[selectedopt]=="Screen off"):
             while not btnLEFT.is_pressed:
@@ -316,4 +327,4 @@ while True:
     # Display image.
     disp.image(image)
     disp.display()
-    # time.sleep(.1)
+    time.sleep(.1)
