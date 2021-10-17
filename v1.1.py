@@ -116,8 +116,19 @@ font = ImageFont.load_default()
 # Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
 
-while True:
+draw.rectangle((0,0,width,height), outline=0, fill=0)
+draw.text((x+12, top+8), "Raspberry Pi NAS", font=font, fill=255)
+draw.text((x+12, top+16), "V 1.1.5", font=font, fill=255)
+disp.image(image)
+disp.display()
+time.sleep(3)
 
+while not btnSET.is_pressed:
+    draw.rectangle((0,0,width,height), outline=0, fill=0)
+    disp.image(image)
+    disp.display()
+
+while True:
     # Draw a black filled box to clear the image.
     draw.rectangle((0,0,width,height), outline=0, fill=0)
     draw.text((x+8, top),       options[index], font=font, fill=255)
