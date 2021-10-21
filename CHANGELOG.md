@@ -8,13 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   
 ### Added
 
--Started development on v2.1
+- Started development on v2.1
 
 ### Deprecated
 
--v1 is now at end of support and will soon be deleted
--v1.1 is now at end of support and will be kept just for referencing
+- v1 is now at end of support and will soon be deleted
+- v1.1 is now at end of support and will be kept just for referencing
 
 ### Removed
 
--Removed v3beta since it doesn't work properly
+- Removed v3beta since it doesn't work properly
