@@ -43,27 +43,29 @@ cd Adafruit_Python_SSD1306
 sudo python3 setup.py install
 ```
 
+>Optional: after the installation you can remove the framework installations file by running `rm -rf Adafruit_Python_SSD1306` on the home directory.
+
+
 **Installing the Raspberry Pi NAS Panel**
 
 Download script (execute on home directory):
 ```sh
 git clone https://github.com/federicoftl/rpi_nas_panel.git
 ```
+> Note: the repository should be cloned into the home directory for ease of access.
 
 **Execution and autostart on boot**
 
 Normal execution:
 ```sh
 cd rpi_nas_panel
-python3 version.py
+python3 panel.py
 ```
-> Note: Change `version` with your desired version name.
 
 Autostart:
 ```sh
 crontab -e
 ```
 
-Add "@reboot python3 /home/pi/rpi_nas_panel/version.py" (without quotes) into crontab.
-> Note: Change `version` with your desired version name.
+Add "@reboot python3 /home/pi/rpi_nas_panel/panel.py" (without quotes) into crontab.
 
